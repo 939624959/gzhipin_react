@@ -1,0 +1,60 @@
+{
+  "name": "gzhipin-client",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@testing-library/jest-dom": "^5.11.9",
+    "@testing-library/react": "^11.2.5",
+    "@testing-library/user-event": "^12.8.1",
+    "antd-mobile": "^2.3.4",
+    "axios": "^0.21.1",
+    "js-cookie": "^2.2.1",
+    "prop-types": "^15.7.2",
+    "rc-queue-anim": "^1.8.5",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "react-redux": "^7.2.2",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "4.0.3",
+    "redux": "^3.7.2",
+    "redux-thunk": "^2.3.0",
+    "socket.io": "^3.1.2",
+    "socket.io-client": "^3.1.2",
+    "web-vitals": "^1.1.0"
+  },
+  "scripts": {
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "babel-plugin-import": "^1.13.3",
+    "css-loader": "^3.2.1",
+    "customize-cra": "^1.0.0",
+    "less": "^3.10.3",
+    "less-loader": "^5.0.0",
+    "react-app-rewired": "^2.1.8",
+    "redux-devtools-extension": "^2.13.8",
+    "style-loader": "^1.0.1"
+  },
+  "proxy": "http://localhost:4000"
+}
