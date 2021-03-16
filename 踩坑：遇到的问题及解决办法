@@ -1,0 +1,109 @@
+### 1. antd-mobile 定制主题不生效    参考网址：https://www.jianshu.com/p/7097348cd900
+（1）按版本下载依赖包
+    npm install --save-dev babel-plugin-import less less-loader style-loader css-loader
+    安装完后的依赖版本：
+      "devDependencies": {
+        "babel-plugin-import": "^1.13.0",
+        "css-loader": "^3.2.1",
+        "less": "^3.10.3",
+        "less-loader": "^5.0.0",
+        "style-loader": "^1.0.1"
+      }
+（2）修改config-overrides.js文件
+    const { override, fixBabelImports, addLessLoader } = require('customize-cra');
+    const theme = require('./antd-theme');
+    module.exports = override(
+        addLessLoader({
+          javascriptEnabled: true,
+          modifyVars: theme,  //定义在第三步中
+        }),
+        fixBabelImports('import', {
+          libraryName: 'antd-mobile',
+          libraryDirectory: 'es',
+          style: true,
+        }),
+    );
+（3）将样式封装一下，在项目根目录创建一个json文件antd-theme.json:
+    {
+        "@brand-primary": "#ff5722",
+        "@brand-primary-tap": "#ffccbc",
+        "@color-text-base-inverse": "#3f51b5"
+    }
+（4）修改下App.js，运行npm start重新启动项目。
+    import React from 'react';
+    import { Button } from 'antd-mobile';
+    const App = () => {
+        return (
+            <div>
+                <Button type="primary">antd-mobile定制主题</Button>
+            </div>
+        );
+    };
+    export default App;
+    
+### 2. mac电脑安装mongodb自启动问题   参考网址：https://www.runoob.com/mongodb/mongodb-osx-install.html
+（1）下载地址：https://www.mongodb.com/download-center#community
+    不要直接点download，点击右侧copy link
+（2）安装
+    cd /usr/local    //进入/usr/local
+    sudo curl -O https://fastdl.mongodb.org/osx/mongodb-osx-ssl-x86_64-4.0.9.tgz   //下载
+    sudo tar -zxvf mongodb-osx-ssl-x86_64-4.0.9.tgz    //解压
+    sudo mv mongodb-osx-x86_64-4.0.9/ mongodb   //重命名为 mongodb 目录
+（3）把 MongoDB 的二进制命令文件目录（安装目录/bin）添加到 PATH 路径中：
+    vim ~/.bash_profile
+    export PATH=/usr/local/mongodb/bin:$PATH  // i进入编辑模式，把这句粘贴进去，按 esc-->: wq退出
+（4）创建日志及数据存放的目录
+    sudo mkdir -p /usr/local/var/mongodb     //创建数据存放路径
+    sudo mkdir -p /usr/local/var/log/mongodb   //创建日志文件路径
+    sudo chown xxx /usr/local/var/mongodb    // xxx 是 yourUserName  确保当前用户对以上两个目录有读写的权限
+    sudo chown xxx /usr/local/var/log/mongodb    // xxx 是 yourUserName  确保当前用户对以上两个目录有读写的权限
+（5）启动
+    mongod --dbpath /usr/local/var/mongodb --logpath /usr/local/var/log/mongodb/mongo.log --fork    //后台启动命令
+    mongod --config /usr/local/etc/mongod.conf    //在控制台上查看运行过程可以直接设置配置文件启动
+    查看 mongod 服务是否启动： ps aux | grep -v grep | grep mongod
+    
+        
+### 3. React配置代理proxy(实现跨域请求)   参考网址：https://blog.csdn.net/jason_renyu/article/details/104640965
+    在新版本的react项目中，在package.json中的proxy只能设置成字符串
+    "proxy": "http://172.16.136.249:8080"
+    
+### 4. socket.io 报CORS跨域错误   参考网址：https://blog.csdn.net/tiaodengyedu/article/details/111129416
+    控制台报错：
+    WebSocket connection to 'ws://localhost:3000/socket.io/?EIO=4&transport=websocket&sid=39fHJTgW0Kwt71abAAA0'
+    failed: Connection closed before receiving a handshake response
+    解决办法：
+    socket = io('ws://localhost:4000', {transports: ['websocket']}    //默认是{ transports: ['polling','websocket'] }
+
+
+### 5. 死循环等低级错误
+    控制台报错：
+    Maximum update depth exceeded. This can happen when a component repeatedly calls setState inside componentWillUpdate or componentDidUpdate. 
+    React limits the number of nested updates to prevent infinite loops.
+    代码中 onclick函数设置错误 onclick = {this.handleXXX()}  
+    正常函数设置： onclick = {this.handleXXX}   or  onclick = {() => this.handleXXX()}
+
+### 6. 控制台警告： 参考网址：https://blog.csdn.net/weixin_34077371/article/details/86016940
+    [Intervention] Unable to preventDefault inside passive event listener due to target being treated as passive.
+    解决办法：
+    （1）在touch的事件监听方法上绑定第三个参数{ passive: false }，通过传递 passive 为 false 来明确告诉浏览器：事件处理程序调用 preventDefault 来阻止默认滑动行为。
+        elem.addEventListener(
+          'touchstart',
+          fn,
+          { passive: false }
+        );
+    （2）使用全局样式样式去掉： 
+        <style>
+        * { touch-action: pan-y; }
+        </style>
+    
+### 7. 解决react：Warning: componentWillMount has been renamed问题   参考网址：https://segmentfault.com/a/1190000020875617?utm_source=tag-newest
+
+
+### 8. 在react项目中使用require引入图片不生效：  参考网址：https://www.cnblogs.com/shellon/p/14240630.html
+    如果使用create-react-app和require导入图像，require返回一个ES模块而不是字符串。这是因为在file-loader中，esModule选项是默认启用的。
+    用以下方式之一导入图像：
+    const image = require('../path/to/image.jpg').default;    
+    import image from '../path/to/image.jpg';
+
+### 9. npm install 下载不成功时报内存错误：
+    执行：npm cache clean --force
